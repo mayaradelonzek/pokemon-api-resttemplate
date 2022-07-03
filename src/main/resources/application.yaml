@@ -1,0 +1,6 @@
+server:
+  port: 8085
+  error:
+    include-message: always
+  servlet:
+    context-path: /rest
