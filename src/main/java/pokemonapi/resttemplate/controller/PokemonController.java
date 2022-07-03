@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import pokemonapi.resttemplate.config.converter.PokemonConverter;
 import pokemonapi.resttemplate.model.integration.PokemonResponse;
 import pokemonapi.resttemplate.service.PokemonIntegrationService;
 
@@ -24,7 +25,7 @@ public class PokemonController {
                 .orElseThrow(() -> {
                     return new ResponseStatusException(HttpStatus.NOT_FOUND, "Pokemon nao encontrado");
                 });
-        return ResponseEntity.ok(pokemon);
+        return ResponseEntity.ok(PokemonConverter.converter(pokemon));
     }
 
     @GetMapping("/name/{name}")
@@ -33,6 +34,6 @@ public class PokemonController {
                 .orElseThrow(() -> {
                     throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pokemon nao encontrado");
                 });
-        return ResponseEntity.ok(pokemonResponse);
+        return ResponseEntity.ok(PokemonConverter.converter(pokemonResponse));
     }
 }
