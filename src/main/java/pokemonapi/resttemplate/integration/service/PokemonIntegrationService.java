@@ -1,15 +1,13 @@
-package pokemonapi.resttemplate.service;
+package pokemonapi.resttemplate.integration.service;
 
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
-import pokemonapi.resttemplate.model.integration.PokemonResponse;
-import pokemonapi.resttemplate.service.exception.BusinessException;
-import pokemonapi.resttemplate.service.exception.PokemonNotFoundException;
-
-import java.util.Optional;
+import pokemonapi.resttemplate.integration.model.PokemonResponse;
+import pokemonapi.resttemplate.integration.service.exception.BusinessException;
+import pokemonapi.resttemplate.integration.service.exception.PokemonNotFoundException;
 
 @Service
 public class PokemonIntegrationService {

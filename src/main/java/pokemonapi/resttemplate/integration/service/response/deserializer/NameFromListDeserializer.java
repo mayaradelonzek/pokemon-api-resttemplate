@@ -1,4 +1,4 @@
-package pokemonapi.resttemplate.config.deserializer;
+package pokemonapi.resttemplate.integration.service.response.deserializer;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -11,18 +11,18 @@ import java.util.List;
 
 public abstract class NameFromListDeserializer extends JsonDeserializer<List<String>> {
 
-    private String campo;
+    private final String field;
 
-    public NameFromListDeserializer(String campo) {
-        this.campo = campo;
+    protected NameFromListDeserializer(String field) {
+        this.field = field;
     }
 
     @Override
-    public List<String> deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+    public List<String> deserialize(JsonParser jsonParser, DeserializationContext context) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode node = mapper.readTree(p);
+        JsonNode node = mapper.readTree(jsonParser);
 
-        return node.findValues(campo)
+        return node.findValues(field)
                 .stream()
                 .map(c -> c.findPath("name").textValue())
                 .toList();

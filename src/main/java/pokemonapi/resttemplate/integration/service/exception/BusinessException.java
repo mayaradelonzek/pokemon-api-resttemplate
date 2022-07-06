@@ -1,4 +1,4 @@
-package pokemonapi.resttemplate.service.exception;
+package pokemonapi.resttemplate.integration.service.exception;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

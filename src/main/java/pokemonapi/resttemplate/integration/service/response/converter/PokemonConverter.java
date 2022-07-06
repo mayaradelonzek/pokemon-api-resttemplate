@@ -1,6 +1,6 @@
-package pokemonapi.resttemplate.config.converter;
+package pokemonapi.resttemplate.integration.service.response.converter;
 
-import pokemonapi.resttemplate.model.integration.PokemonResponse;
+import pokemonapi.resttemplate.integration.model.PokemonResponse;
 
 public class PokemonConverter {
 

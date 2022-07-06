@@ -1,59 +1,24 @@
 package pokemonapi.resttemplate.controller;
 
-import io.swagger.annotations.Api;
-import org.springframework.http.HttpStatus;
+import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import pokemonapi.resttemplate.config.converter.PokemonConverter;
-import pokemonapi.resttemplate.controller.swagger.PokemonControllerSwagger;
-import pokemonapi.resttemplate.model.integration.PokemonResponse;
-import pokemonapi.resttemplate.service.PokemonIntegrationService;
-import pokemonapi.resttemplate.service.exception.BusinessException;
-import pokemonapi.resttemplate.service.exception.PokemonNotFoundException;
+import pokemonapi.resttemplate.integration.model.PokemonResponse;
 
-@RestController
-@RequestMapping(value = "/api/v1/pokemons")
-@CrossOrigin(origins = "*")
-public class PokemonController implements PokemonControllerSwagger {
+@Api(tags = "Pokémons")
+public interface PokemonController {
 
-    public PokemonIntegrationService pokemonIntegrationService;
+    @ApiOperation(value = "Get a pokemon by id", notes = "Returns a pokemon as per the id")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved"),
+            @ApiResponse(code = 404, message = "Not found - The pokémon was not found")
+    })
+    public ResponseEntity<PokemonResponse> findById(@ApiParam(value = "Pokémon id", example = "1") Integer id);
 
-    protected PokemonController(PokemonIntegrationService pokemonIntegrationService) {
-        this.pokemonIntegrationService = pokemonIntegrationService;
-    }
+    @ApiOperation(value = "Get a pokemon by name", notes = "Returns a pokemon as per the name")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved"),
+            @ApiResponse(code = 404, message = "Not found - The pokémon was not found")
+    })
+    public ResponseEntity<PokemonResponse> findByName(@ApiParam(value = "Pokémon name", example = "bulbasaur") String name);
 
-    @GetMapping("/{id}")
-    public ResponseEntity<PokemonResponse> findById(@PathVariable("id") Integer id ) {
-        PokemonResponse pokemon = pokemonIntegrationService.findById(id);
-        return ResponseEntity.ok(PokemonConverter.converter(pokemon));
-    }
-
-    @GetMapping("/name/{name}")
-    public ResponseEntity<PokemonResponse> findByName(@PathVariable("name") String name) {
-        PokemonResponse pokemonResponse = pokemonIntegrationService.findByName(name);
-        return ResponseEntity.ok(PokemonConverter.converter(pokemonResponse));
-    }
-
-    @ExceptionHandler(PokemonNotFoundException.class)
-    public ResponseEntity<Problem> handlePokemonNotFoundException(PokemonNotFoundException ex) {
-        HttpStatus status = HttpStatus.NOT_FOUND;
-        Problem problem = this.buildProblem(status.value(), ex.getMessage());
-
-        return ResponseEntity.status(status).body(problem);
-    }
-
-    @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<Problem> handleBusinessException(BusinessException ex) {
-        HttpStatus status = ex.getStatus();
-        Problem problem = this.buildProblem(status.value(), ex.getMessage());
-
-        return ResponseEntity.status(status).body(problem);
-    }
-
-    private Problem buildProblem(Integer status, String message) {
-        return Problem.builder()
-                .status(status)
-                .message(message)
-                .build();
-    }
 }

@@ -1,4 +1,4 @@
-package pokemonapi.resttemplate.controller;
+package pokemonapi.resttemplate.controller.impl;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

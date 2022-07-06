@@ -1,4 +1,4 @@
-package pokemonapi.resttemplate.model.integration;
+package pokemonapi.resttemplate.integration.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -8,9 +8,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import pokemonapi.resttemplate.config.deserializer.MoveDeserializer;
-import pokemonapi.resttemplate.config.deserializer.SpriteDeserializer;
-import pokemonapi.resttemplate.config.deserializer.TypeDeserializer;
+import pokemonapi.resttemplate.integration.service.response.deserializer.MoveDeserializer;
+import pokemonapi.resttemplate.integration.service.response.deserializer.SpriteDeserializer;
+import pokemonapi.resttemplate.integration.service.response.deserializer.TypeDeserializer;
 
 import java.net.URI;
 import java.util.List;

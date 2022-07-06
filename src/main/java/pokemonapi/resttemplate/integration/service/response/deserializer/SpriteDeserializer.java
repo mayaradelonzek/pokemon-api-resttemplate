@@ -1,4 +1,4 @@
-package pokemonapi.resttemplate.config.deserializer;
+package pokemonapi.resttemplate.integration.service.response.deserializer;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -13,9 +13,9 @@ import java.util.Optional;
 public class SpriteDeserializer extends JsonDeserializer<URI> {
 
     @Override
-    public URI deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+    public URI deserialize(JsonParser jsonParser, DeserializationContext context) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode root = mapper.readTree(p);
+        JsonNode root = mapper.readTree(jsonParser);
 
         String nodeGen2 = root.findPath("versions")
                 .findPath("generation-ii")
