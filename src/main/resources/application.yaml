@@ -1,6 +1,15 @@
 server:
-  port: 8085
+  port: 8081
   error:
     include-message: always
   servlet:
     context-path: /rest
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:3090/postgres
+    username: postgres
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: create-drop

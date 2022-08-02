@@ -10,6 +10,10 @@ import pokemonapi.resttemplate.integration.model.PokemonResponse;
 import pokemonapi.resttemplate.integration.service.PokemonIntegrationService;
 import pokemonapi.resttemplate.integration.service.exception.BusinessException;
 import pokemonapi.resttemplate.integration.service.exception.PokemonNotFoundException;
+import pokemonapi.resttemplate.model.Pokemon;
+import pokemonapi.resttemplate.repository.PokemonRepository;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/api/v1/pokemons")
@@ -17,9 +21,15 @@ import pokemonapi.resttemplate.integration.service.exception.PokemonNotFoundExce
 public class PokemonControllerImpl implements PokemonController {
 
     public PokemonIntegrationService pokemonIntegrationService;
+    public PokemonRepository pokemonRepository;
 
-    protected PokemonControllerImpl(PokemonIntegrationService pokemonIntegrationService) {
+    protected PokemonControllerImpl(PokemonIntegrationService pokemonIntegrationService, PokemonRepository pokemonRepository) {
         this.pokemonIntegrationService = pokemonIntegrationService;
+        this.pokemonRepository = pokemonRepository;
+    }
+
+    @Deprecated(since = "uso do spring")
+    public PokemonControllerImpl() {
     }
 
     @GetMapping("/{id}")
@@ -28,10 +38,16 @@ public class PokemonControllerImpl implements PokemonController {
         return ResponseEntity.ok(PokemonConverter.converter(pokemon));
     }
 
-    @GetMapping(params = {"name"})
-    public ResponseEntity<PokemonResponse> findByName(@RequestParam("name") String name) {
+    @GetMapping("poke/{name}")
+    public ResponseEntity<PokemonResponse> findByName(@PathVariable("name") String name) {
         PokemonResponse pokemonResponse = pokemonIntegrationService.findByName(name);
         return ResponseEntity.ok(PokemonConverter.converter(pokemonResponse));
+    }
+
+    @PostMapping
+    public ResponseEntity<Pokemon> Save(@Valid @RequestBody Pokemon pokemon) {
+        Pokemon savedPokemon = pokemonRepository.save(pokemon);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedPokemon);
     }
 
     @ExceptionHandler(PokemonNotFoundException.class)
