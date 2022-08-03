@@ -1,8 +1,10 @@
 package pokemonapi.resttemplate.controller.impl;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pokemonapi.resttemplate.controller.event.RecursoCriadoEvent;
 import pokemonapi.resttemplate.integration.service.response.converter.PokemonConverter;
 import pokemonapi.resttemplate.controller.PokemonController;
 import pokemonapi.resttemplate.controller.Problem;
@@ -13,6 +15,7 @@ import pokemonapi.resttemplate.integration.service.exception.PokemonNotFoundExce
 import pokemonapi.resttemplate.model.Pokemon;
 import pokemonapi.resttemplate.repository.PokemonRepository;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @RestController
@@ -20,15 +23,18 @@ import javax.validation.Valid;
 @CrossOrigin(origins = "*")
 public class PokemonControllerImpl implements PokemonController {
 
-    public PokemonIntegrationService pokemonIntegrationService;
-    public PokemonRepository pokemonRepository;
+    private PokemonIntegrationService pokemonIntegrationService;
+    private PokemonRepository pokemonRepository;
 
-    protected PokemonControllerImpl(PokemonIntegrationService pokemonIntegrationService, PokemonRepository pokemonRepository) {
+    private ApplicationEventPublisher publisher;
+
+    public PokemonControllerImpl(PokemonIntegrationService pokemonIntegrationService, PokemonRepository pokemonRepository, ApplicationEventPublisher publisher) {
         this.pokemonIntegrationService = pokemonIntegrationService;
         this.pokemonRepository = pokemonRepository;
+        this.publisher = publisher;
     }
 
-    @Deprecated(since = "uso do spring")
+    @Deprecated()
     public PokemonControllerImpl() {
     }
 
@@ -45,9 +51,27 @@ public class PokemonControllerImpl implements PokemonController {
     }
 
     @PostMapping
-    public ResponseEntity<Pokemon> Save(@Valid @RequestBody Pokemon pokemon) {
+    public ResponseEntity<Pokemon> Save(@Valid @RequestBody Pokemon pokemon, HttpServletResponse httpServletResponse) {
         Pokemon savedPokemon = pokemonRepository.save(pokemon);
+        publisher.publishEvent(new RecursoCriadoEvent(this, httpServletResponse, savedPokemon.getId()));
         return ResponseEntity.status(HttpStatus.CREATED).body(savedPokemon);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void remove(@PathVariable Integer id) {
+        pokemonRepository.deleteById(id);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Pokemon> edit(@PathVariable Integer id, @Valid @RequestBody Pokemon pokemon) {
+        try {
+//            Pokemon pokemonSalvo = pokemonService.edit(id, pokemon);
+//            return ResponseEntity.ok(pokemonSalvo);
+            return null;
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @ExceptionHandler(PokemonNotFoundException.class)
