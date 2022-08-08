@@ -34,10 +34,6 @@ public class PokemonControllerImpl implements PokemonController {
         this.publisher = publisher;
     }
 
-    @Deprecated()
-    public PokemonControllerImpl() {
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<PokemonResponse> findById(@PathVariable("id") Integer id ) {
         PokemonResponse pokemon = pokemonIntegrationService.findById(id);

@@ -1,10 +1,8 @@
 package pokemonapi.resttemplate.controller;
 
 import io.swagger.annotations.*;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pokemonapi.resttemplate.controller.event.RecursoCriadoEvent;
 import pokemonapi.resttemplate.integration.model.PokemonResponse;
 import pokemonapi.resttemplate.model.Pokemon;
 

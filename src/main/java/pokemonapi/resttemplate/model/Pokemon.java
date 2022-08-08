@@ -1,18 +1,11 @@
 package pokemonapi.resttemplate.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import pokemonapi.resttemplate.integration.service.response.deserializer.MoveDeserializer;
-import pokemonapi.resttemplate.integration.service.response.deserializer.SpriteDeserializer;
-import pokemonapi.resttemplate.integration.service.response.deserializer.TypeDeserializer;
-
 import javax.persistence.*;
-import java.net.URI;
 import java.util.List;
 
 @Data
@@ -23,6 +16,8 @@ import java.util.List;
 public class Pokemon {
 
 
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "local")
+//    @SequenceGenerator(name = "local", initialValue = 906)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ApiModelProperty(value = "Pokémon ID", example = "1", required = true)
@@ -40,13 +35,21 @@ public class Pokemon {
     @ApiModelProperty(value = "Pokémon sprite", example = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-ii/silver/shiny/1.png", required = false)
     private String sprite;
 
+    @ApiModelProperty(value = "Pokémon types", required = true)
+    @ManyToOne
+    @JoinColumn(name="type1_id", nullable=false)
+    private Type type1;
+
     @ApiModelProperty(value = "Pokémon types", required = false)
-    @OneToMany
-    @JoinColumn(name = "id_pokemon", foreignKey = @ForeignKey(name = "FK_pokemon_type"))
-    private List<Type> types;
+    @ManyToOne
+    @JoinColumn(name="type2_id")
+    private Type type2;
 
     @ApiModelProperty(value = "Pokémon moves", required = false)
-    @OneToMany
-    @JoinColumn(name = "id_pokemon", foreignKey = @ForeignKey(name = "FK_pokemon_move"))
+    @ManyToMany
+    @JoinTable(
+            name = "pokemon_moves",
+            joinColumns = @JoinColumn(name = "id_pokemon"),
+            inverseJoinColumns = @JoinColumn(name = "id_move"))
     private List<Move> moves;
 }

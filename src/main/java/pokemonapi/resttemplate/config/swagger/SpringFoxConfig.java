@@ -27,7 +27,9 @@ public class SpringFoxConfig {
                 .useDefaultResponseMessages(false)
                 .apiInfo(apiInfo())
                 .tags(new Tag("Health Controller", "Verify if API is up"),
-                        new Tag("Pokémons", "Manages Pokémons"));
+                        new Tag("Pokémons", "Manages Pokémons"),
+                        new Tag("Moves", "Manages Pokémons moves"),
+                        new Tag("Types", "Manages Pokémons types"));
     }
 
     private ApiInfo apiInfo() {
