@@ -1,4 +1,4 @@
-package pokemonapi.resttemplate.integration.model;
+package pokemonapi.resttemplate.controller.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;

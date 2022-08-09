@@ -5,8 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+
 import javax.persistence.*;
 import java.util.List;
+import java.util.Optional;
 
 @Data
 @AllArgsConstructor
@@ -15,11 +18,9 @@ import java.util.List;
 @Entity
 public class Pokemon {
 
-
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "local")
-//    @SequenceGenerator(name = "local", initialValue = 906)
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pokemon_seq")
+    @SequenceGenerator(name = "pokemon_seq", sequenceName = "POKEMON_SEQ", initialValue = 906, allocationSize = 1)
     @ApiModelProperty(value = "Pokémon ID", example = "1", required = true)
     private Integer id;
 
@@ -52,4 +53,13 @@ public class Pokemon {
             joinColumns = @JoinColumn(name = "id_pokemon"),
             inverseJoinColumns = @JoinColumn(name = "id_move"))
     private List<Move> moves;
+
+    @Column(columnDefinition = "boolean default true")
+    private Boolean active;
+
+    public Boolean hasTwoTypes() {
+        return StringUtils.isNotBlank(Optional.ofNullable(this.type2)
+                        .orElse(new Type())
+                        .getName());
+    }
 }

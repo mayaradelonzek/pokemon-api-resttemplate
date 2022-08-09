@@ -5,18 +5,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
-import pokemonapi.resttemplate.integration.model.PokemonResponse;
+import pokemonapi.resttemplate.controller.dto.PokemonResponse;
 import pokemonapi.resttemplate.integration.service.exception.BusinessException;
 import pokemonapi.resttemplate.integration.service.exception.PokemonNotFoundException;
 
 @Service
-public class PokemonIntegrationService {
+public class PokeApiService {
 
     private final RestTemplate restTemplate;
 
     private final String uri;
 
-    public PokemonIntegrationService(RestTemplateBuilder restTemplateBuilder) {
+    public PokeApiService(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder.build();
         this.uri = "https://pokeapi.co/api/v2/pokemon";
     }

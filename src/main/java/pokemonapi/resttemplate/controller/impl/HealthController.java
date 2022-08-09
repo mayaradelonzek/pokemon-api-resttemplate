@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/health")
 @CrossOrigin(origins = "*")
 public class HealthController {
-
     @ApiOperation(value = "Get a health check from API", notes = "Returns a String")
     @GetMapping
     public ResponseEntity<String> healthCheck() {

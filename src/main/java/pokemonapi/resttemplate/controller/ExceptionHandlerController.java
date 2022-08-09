@@ -9,18 +9,23 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import pokemonapi.resttemplate.integration.service.exception.BusinessException;
+import pokemonapi.resttemplate.integration.service.exception.PokemonNotFoundException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ExceptionHandler extends ResponseEntityExceptionHandler {
+@ControllerAdvice
+public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 
     private MessageSource messageSource;
 
-    public ExceptionHandler(MessageSource messageSource) {
+    public ExceptionHandlerController(MessageSource messageSource) {
         this.messageSource = messageSource;
     }
 
@@ -50,6 +55,29 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
         }
 
         return erros;
+    }
+
+    @ExceptionHandler(PokemonNotFoundException.class)
+    public ResponseEntity<Problem> handlePokemonNotFoundException(PokemonNotFoundException ex) {
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        Problem problem = this.buildProblem(status.value(), ex.getMessage());
+
+        return ResponseEntity.status(status).body(problem);
+    }
+
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<Problem> handleBusinessException(BusinessException ex) {
+        HttpStatus status = ex.getStatus();
+        Problem problem = this.buildProblem(status.value(), ex.getMessage());
+
+        return ResponseEntity.status(status).body(problem);
+    }
+
+    private Problem buildProblem(Integer status, String message) {
+        return Problem.builder()
+                .status(status)
+                .message(message)
+                .build();
     }
 
     public static class Erro {
